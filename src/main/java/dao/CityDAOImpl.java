@@ -1,60 +1,51 @@
 package dao;
 
 import config.HibernateSessionFactoryUtil;
-import model.Employee;
+import model.City;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.util.List;
 
-public class EmployeeDAOImpl implements EmployeeDAO{
+public class CityDAOImpl implements CityDAO{
 
     @Override
-    public void create(Employee employee) {
+    public void createCity(City city) {
         try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            session.save(employee);
-            transaction.commit();
-
-        }
-    }
-
-    @Override
-    public Employee getById(int id) {
-        try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
-            return session.get(Employee.class, id);
-        }
-    }
-
-
-    @Override
-    public List<Employee> getAllEmployees() {
-        try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
-            return session.createQuery(" FROM Employee").list();
-        }
-    }
-
-
-
-    @Override
-    public void updateEmployee(Employee employee) {
-        try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
-            // Для обновления данных нужно передать в конструктор
-            // объект с актуальными данными
-            session.update(employee);
+            session.save(city);
             transaction.commit();
         }
     }
 
-
+    @Override
+    public City getByIdCity(int id) {
+        try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
+            return session.get(City.class, id);
+        }
+    }
 
     @Override
-    public void deleteEmployee(Employee employee) {
+    public List<City> getAllCities() {
+        try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
+            return session.createQuery("from City").list();
+        }
+    }
+
+    @Override
+    public void updateCity(City city) {
         try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            // Для удаления объекта из таблицы нужно передать его в метод delete
-            session.delete(employee);
+            session.update(city);
+            transaction.commit();
+        }
+    }
+
+    @Override
+    public void deleteCity(City city) {
+        try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.delete(city);
             transaction.commit();
         }
     }
