@@ -1,10 +1,11 @@
 package model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "employee")
-public class Employee {
+ public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,16 +23,15 @@ public class Employee {
     @Column(name = "age")
     private int age;
 
-    @Column(name = "city_id")
-    private int cityId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "city_id")
+    private City cityId;
 
-    public Employee(int id, String firstName, String lastName, String gender, int age, int cityId) {
-        this.id = id;
+    public Employee( String firstName, String lastName, String gender, int age) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
         this.age = age;
-        this.cityId = cityId;
     }
 
     public Employee() {
@@ -77,13 +77,24 @@ public class Employee {
         this.age = age;
     }
 
-    public int getCityId() {
+    public void setCityId(City cityId) {
+        this.cityId = cityId;
+    }
+
+    public City getCityId() {
         return cityId;
     }
 
-    public void setCityId(int cityId) {
-        this.cityId = cityId;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return Objects.equals(id, employee.id) && Objects.equals(firstName, employee.firstName)
+                && Objects.equals(lastName, employee.lastName) && Objects.equals(gender, employee.gender)
+                && Objects.equals(age, employee.age) && Objects.equals(cityId, employee.cityId);
     }
+
 
     @Override
     public String toString() {
@@ -93,7 +104,6 @@ public class Employee {
                 ", lastName='" + lastName + '\'' +
                 ", gender='" + gender + '\'' +
                 ", age=" + age +
-                ", cityId=" + cityId +
                 '}';
     }
 }
